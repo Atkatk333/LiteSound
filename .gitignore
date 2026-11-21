@@ -1,0 +1,37 @@
+# ---------- 构建产物 ----------
+# release 快照、运行目录与编译输出都不入库
+/target/
+# APP\current\ 里的 exe 是 release 快照，state.txt/diag.txt 是运行时状态
+/APP/
+
+# ---------- 日志与临时 ----------
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+
+# ---------- 截图与一次性产物 ----------
+/.screenshots/
+/scratch/
+/tmp/
+
+# ---------- 凭据与环境 ----------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+secrets.*
+credentials.*
+
+# ---------- 编辑器 / 操作系统 ----------
+.vscode/
+.idea/
+*.sublime-workspace
+Thumbs.db
+.DS_Store
+desktop.ini

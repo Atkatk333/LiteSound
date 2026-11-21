@@ -1,0 +1,2 @@
+// 应用图标资源。ID 写 1，ExtractIconExW(exe, 0) 按"第 0 组图标"读到的就是它。
+1 ICON "assets\\litesound.ico"

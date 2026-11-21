@@ -1,0 +1,24 @@
+[package]
+name = "litesound"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+windows = { version = "0.62.2", default-features = false, features = ["Win32_Foundation", "Win32_System_Com", "Win32_System_Com_StructuredStorage", "Win32_Media_Audio", "Win32_UI_Shell", "Win32_UI_Shell_PropertiesSystem", "Win32_UI_WindowsAndMessaging", "Win32_Graphics_Gdi", "Win32_System_Variant", "Win32_System_SystemInformation", "Win32_System_LibraryLoader", "Win32_System_Threading", "Win32_Security", "Win32_System_Console", "Win32_System_Registry", "Win32_UI_HiDpi", "Win32_UI_Input_Ime", "Win32_Graphics_Dwm", "Win32_Media", "Win32_UI_Input_KeyboardAndMouse", "Win32_UI_Controls", "Win32_Graphics_DirectWrite"] }
+# #[implement]（端点通知回调）生成的代码里写死了 ::windows_core:: 路径，
+# 用那个宏就必须让 windows_core 这个名字可命名——宏自己没有覆盖路径的入口。
+# `default-features = false` 不是风格而是必需：windows-core 的 default = ["std"]，
+# 而 std 会拉起 windows-result/std 与 windows-strings/std，本项目的 windows 本就没开
+# std，按默认特性加这条依赖会让 feature 合并把 std 打开、凭空多编译一批代码。
+# 关掉之后特性集与现状逐位相同：零新增编译单元、零新增代码、零运行时开销
+#（windows-core 本来就在树里，由 windows 硬依赖）。
+windows-core = { version = "0.62.2", default-features = false }
+
+[build-dependencies]
+# 把 windows.rc（应用图标）编进 exe。它优先找 Windows SDK 的 rc.exe，找不到就用 PATH 上的 windres。
+embed-resource = "3"
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true
