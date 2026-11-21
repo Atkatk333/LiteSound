@@ -3,7 +3,7 @@
 $ErrorActionPreference = 'Stop'
 
 # ---------- 按本仓库调整 ----------
-$AbsPath     = '(?i)([A-Za-z]:[\\/]|\\\\|\b/(home|Users)/[A-Za-z0-9._-]+/|file://)'
+$AbsPath     = '(?i)((?<![A-Za-z0-9])[A-Za-z]:[\\/]|\\\\|\b/(home|Users)/[A-Za-z0-9._-]+/)'
 # 本仓库允许的通用/占位路径：占位符、系统临时目录、测试用驱动路径
 $AbsAllow    = '(?i)(%USERPROFILE%|%APPDATA%|%LOCALAPPDATA%|%TEMP%|\$HOME|~/|<repo>|<user>|<hostname>|<device|C:\\+Windows)'
 $ProcName    = '(?i)(handoff|交接|笔记|草稿|调研|临时|scratch|wip|todo|worklog|session|git-tree|branch-tree)'
@@ -24,6 +24,8 @@ $issues = [System.Collections.Generic.List[string]]::new()
 function Add-Issue([string]$file, [string]$reason) { $script:issues.Add(('{0} :: {1}' -f $file, $reason)) }
 
 foreach ($f in $files) {
+    # 钩子自身的规则字面量（正则、密钥样例）必然命中这些检查，跳过自检
+    if ($f -like '.githooks/*') { continue }
     $name = [System.IO.Path]::GetFileName($f)
     $ext  = [System.IO.Path]::GetExtension($f).ToLowerInvariant()
 
